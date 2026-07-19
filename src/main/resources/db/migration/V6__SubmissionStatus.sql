@@ -1,0 +1,2 @@
+
+ALTER TABLE submission ADD COLUMN status VARCHAR(50)
