@@ -22,8 +22,8 @@ public class CodeRepositoryImpl  implements CodeFileRepository{
     public void insert(CodeFile code) {
 
         dsl.insertInto(CODE)
-        .columns(CODE.SUBMISSION_ID,CODE.FILENAME,CODE.FILE_PATH,CODE.SIZE)
-        .values(code.getSubmission_id(),code.getFilename(),code.getFile_path(),code.getSize())
+        .columns(CODE.SUBMISSION_ID,CODE.FILENAME,CODE.FILE_PATH,CODE.SIZE,CODE.EXTENSION)
+        .values(code.getSubmission_id(),code.getFilename(),code.getFile_path(),code.getSize(),code.getExtension())
         .execute();
 
     }
@@ -31,7 +31,7 @@ public class CodeRepositoryImpl  implements CodeFileRepository{
     @Override
     public List<CodeFile> findBySubmissionId(Long submissionId) {
 
-        return dsl.select(CODE.FILENAME,CODE.SIZE,CODE.FILE_PATH).from(CODE)
+        return dsl.select(CODE.FILENAME,CODE.SIZE,CODE.FILE_PATH,CODE.EXTENSION).from(CODE)
             .where(CODE.SUBMISSION_ID.eq(submissionId))
             .fetchInto(CodeFile.class);
 

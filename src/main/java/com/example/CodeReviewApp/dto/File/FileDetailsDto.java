@@ -17,6 +17,8 @@ public class FileDetailsDto {
 
     private String filename;
 
+    private String extension;
+
     private byte[] content;
 
     private Long size;

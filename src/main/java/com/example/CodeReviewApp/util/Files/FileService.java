@@ -14,4 +14,7 @@ public interface FileService {
     
     void deleteSubmissionFiles(Long submissionId);
 
-    void moveFilesToPermanentStorage(Long submissionId);}
+    void moveFilesToPermanentStorage(Long submissionId);
+
+    String resolveSubmissionUploadDir(Long submissionId);
+}

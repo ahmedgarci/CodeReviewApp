@@ -12,10 +12,11 @@ import com.example.CodeReviewApp.dto.File.FileDetailsDto;
 public class CodeFileFactory {
     
 
-    public CodeFile toCodeFile(MultipartFile file,String path){
+    public CodeFile toCodeFile(MultipartFile file,String path,String extension){
 
         return CodeFile.builder()
                         .file_path(path)
+                        .extension(extension)
                         .filename(file.getOriginalFilename())
                         .uploaded_at(LocalDateTime.now())
                         .size(file.getSize())
@@ -25,6 +26,7 @@ public class CodeFileFactory {
     public FileDetailsDto toFileDetailsDto(CodeFile file,byte[] content){
 
         return FileDetailsDto.builder()
+                .extension(file.getExtension())
                 .id(file.getId())
                 .content(content)
                 .filename(file.getFilename())

@@ -2,6 +2,7 @@ package com.example.CodeReviewApp.Repo;
 
 import java.util.List;
 
+import com.example.CodeReviewApp.Models.User;
 import com.example.CodeReviewApp.dto.User.UserDto;
 
 public interface ProjectMembersRepository {
@@ -14,5 +15,5 @@ public interface ProjectMembersRepository {
 
     boolean reviewersAreProjectMembers(Long projectId,List<Long> reviewerIds);
 
-    
+    User getAvailableReviewer(Long projectId,Long authorId);
 }

@@ -2,18 +2,14 @@ package com.example.CodeReviewApp.Service;
 
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
 
 import com.example.CodeReviewApp.Models.Enums.SubmissionStatus;
-import com.example.CodeReviewApp.dto.Submissions.In.PublishReviewDto;
 import com.example.CodeReviewApp.dto.Submissions.Out.FileContentResponseDto;
 import com.example.CodeReviewApp.dto.Submissions.Out.ProjectSubmissionsDto;
 import com.example.CodeReviewApp.dto.Submissions.Out.SubmissionDetailsDto;
 
-public interface SubmissionService {
+public interface SubmissionDetailsService {
     
-    void publishCode(PublishReviewDto dto,List<MultipartFile> files,Long projectId);
-
     List<ProjectSubmissionsDto> getProjectSubmissions(Long projectId);
 
     SubmissionDetailsDto getSubmissionDetails(Long submissionId);

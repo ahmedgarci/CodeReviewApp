@@ -43,5 +43,15 @@ public class ProjectRepositoryImpl implements ProjectRepository{
             .fetchInto(ProjectDetails.class);
 
     }
+
+    @Override
+    public Project getProjectById(Long projectId) {
+
+        return dsl.select(PROJECT.fields()).from(PROJECT).where(PROJECT.ID.eq(projectId)).fetchOneInto(Project.class);
+
+
+    }
+
+
     
 }

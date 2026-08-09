@@ -29,4 +29,6 @@ public class SubmissionDetailsDto {
         private String status;
 
         private LocalDateTime submitted_at;
+
+        private List<String> labels;
 }

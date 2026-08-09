@@ -2,6 +2,7 @@ package com.example.CodeReviewApp.dto.Submissions.In;
 
 import java.util.List;
 
+import com.example.CodeReviewApp.Service.ReviewsStrategy.Enums.ReviewType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,4 +21,6 @@ public class PublishReviewDto {
     private String title;
 
     private List<Long> reviewers;
+
+    private ReviewType strategy;
 }

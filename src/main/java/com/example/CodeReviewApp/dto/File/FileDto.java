@@ -14,6 +14,8 @@ public class FileDto {
 
     private String filename;
 
+    private String language;
+
     private Long size;
 
 }

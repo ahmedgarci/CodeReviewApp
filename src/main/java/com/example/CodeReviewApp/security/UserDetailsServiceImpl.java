@@ -3,14 +3,14 @@ package com.example.CodeReviewApp.security;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.example.CodeReviewApp.Repo.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Service
+@Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepositoryImpl;

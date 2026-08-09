@@ -81,12 +81,14 @@ public class SubmissionRepositoryImpl implements SubmissionRepository {
         List<FileDto> files = dsl.select(
                 CODE.ID,
                 CODE.FILENAME,
+                CODE.EXTENSION,
                 CODE.SIZE)
                 .from(CODE)
                 .where(CODE.SUBMISSION_ID.eq(submissionId))
                 .fetch(record -> new FileDto(
                         record.get(CODE.ID),
                         record.get(CODE.FILENAME),
+                        record.get(CODE.EXTENSION),
                         record.get(CODE.SIZE)));
 
         // Fetch reviewers
@@ -109,7 +111,8 @@ public class SubmissionRepositoryImpl implements SubmissionRepository {
                 files,
                 reviewers,
                 submissionRecord.get(SUBMISSION.STATUS),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                List.of()
 //                submissionRecord.get(SUBMISSION.)
         );
     }

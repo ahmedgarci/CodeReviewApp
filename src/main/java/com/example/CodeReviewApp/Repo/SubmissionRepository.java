@@ -20,5 +20,7 @@ public interface SubmissionRepository {
     void updateSubmissionStatus(Long submissionId,SubmissionStatus target);
 
     boolean isSubmissionClosed(Long submissionId);
+
+    
     
 }

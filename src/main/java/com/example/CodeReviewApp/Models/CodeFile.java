@@ -19,6 +19,7 @@ public class CodeFile {
     private Long id;
     private Long submission_id;
     private String filename;
+    private String extension;
     private String file_path;
     private Long size;
     private LocalDateTime uploaded_at;

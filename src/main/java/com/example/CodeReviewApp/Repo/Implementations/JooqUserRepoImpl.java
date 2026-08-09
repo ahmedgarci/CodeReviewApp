@@ -13,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 
 import static com.example.jooq.Tables.USERS;;
 
-@Repository
 @RequiredArgsConstructor
+@Repository
 public class JooqUserRepoImpl implements UserRepository {
 
 

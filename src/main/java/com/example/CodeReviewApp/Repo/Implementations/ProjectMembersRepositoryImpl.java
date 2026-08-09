@@ -6,8 +6,10 @@ import static com.example.jooq.Tables.USERS;
 import java.util.List;
 
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
+import com.example.CodeReviewApp.Models.User;
 import com.example.CodeReviewApp.Repo.ProjectMembersRepository;
 import com.example.CodeReviewApp.dto.User.UserDto;
 
@@ -55,6 +57,18 @@ public class ProjectMembersRepositoryImpl implements ProjectMembersRepository {
                 .fetchOne(0, int.class);
 
         return count == reviewerIds.size();
+
+    }
+
+    @Override
+    public User getAvailableReviewer(Long projectId,Long authorId) {
+
+        return dsl.select(USERS.fields())
+                    .from(PROJECT_MEMBERS).join(USERS)
+                    .on(PROJECT_MEMBERS.USER_ID.eq(USERS.ID))
+                    .where(PROJECT_MEMBERS.PROJECT_ID.eq(projectId))
+                    .and(USERS.ID.ne(authorId))
+                    .groupBy(USERS.ID).orderBy(DSL.count(USERS.ID).asc()).limit(1).fetchOneInto(User.class);
 
     }
 }

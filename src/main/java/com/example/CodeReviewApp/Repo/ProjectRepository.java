@@ -11,4 +11,6 @@ public interface ProjectRepository {
     void insertProject(Project project);
 
     List<ProjectDetails> getUserInvolvedProjects(Long user_id);
+
+    Project getProjectById(Long projectId);
 }

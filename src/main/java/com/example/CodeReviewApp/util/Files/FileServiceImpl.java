@@ -16,6 +16,7 @@ import com.example.CodeReviewApp.Models.CodeFile;
 import com.example.CodeReviewApp.exceptions.FileStorageException;
 import com.example.CodeReviewApp.mapper.CodeFileFactory;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -46,11 +47,13 @@ public class FileServiceImpl  implements FileService{
 
                 String pathToSave = file.getOriginalFilename();             
 
+                final String extension = getFileExtension(pathToSave);
+
                 Path filePath = submissionFolder.resolve(pathToSave);
 
                 Files.copy(file.getInputStream(), filePath);
 
-                CodeFile codeFile = codeFileFactory.toCodeFile(file, Paths.get(submissionId.toString(), pathToSave).toString());
+                CodeFile codeFile = codeFileFactory.toCodeFile(file, Paths.get(submissionId.toString(), pathToSave).toString(),extension);
 
                 codeFile.setSubmission_id(submissionId);
 
@@ -161,7 +164,19 @@ public class FileServiceImpl  implements FileService{
         
         }
 
+    }
+
+    public String resolveSubmissionUploadDir(@NotNull Long submissionId){
+
+        return Paths.get(UPLOAD_DIR, submissionId.toString()).toString();
 
     }
     
+    private String getFileExtension(String fileName){
+        int index = fileName.lastIndexOf('.');
+        if(index == -1 ) throw new IllegalArgumentException("no file extension");
+
+        return fileName.substring(index+1);
+
+    }
 }

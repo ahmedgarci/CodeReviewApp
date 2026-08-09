@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.CodeReviewApp.Models.User;
 import com.example.CodeReviewApp.dto.Authentication.In.RegistrationDto;
+import com.example.CodeReviewApp.dto.User.UserDto;
 
 @Component
 public class UserFactory {
@@ -18,5 +19,11 @@ public class UserFactory {
                 .password(registrationDto.password())
                 .created_at(LocalDate.now())
                 .build();
+    }
+
+    public UserDto toUserDto(User user){
+
+        return UserDto.builder().username(user.getUsername()).id(user.getId()).build();
+
     }
 }
