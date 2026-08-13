@@ -5,7 +5,7 @@ import com.example.CodeReviewApp.Models.Enums.SubmissionExecutionStatus;
 
 public interface SubmissionExecutionRepository {
     
-    void insert(SubmissionExecution submission);
+    Long insert(SubmissionExecution submission);
 
     void updateStatus(Long submissionExecutionId,SubmissionExecutionStatus target);
 

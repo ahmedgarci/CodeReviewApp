@@ -15,7 +15,7 @@ public class SonarIssue {
 
     private String severity;
     private String component;
-    private Integer line;
+    private Long line;
     private String message;
     private String type;
 

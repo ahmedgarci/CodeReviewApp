@@ -8,8 +8,10 @@ import com.example.CodeReviewApp.dto.User.UserDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class SubmissionDetailsDto {
 
@@ -31,4 +33,6 @@ public class SubmissionDetailsDto {
         private LocalDateTime submitted_at;
 
         private List<String> labels;
+
+        private List<SonarIssue> sonarIssues;
 }

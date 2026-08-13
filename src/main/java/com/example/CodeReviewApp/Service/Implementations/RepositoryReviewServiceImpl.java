@@ -52,9 +52,9 @@ public class RepositoryReviewServiceImpl  implements RepoReviewService{
 
         SubmissionExecution execution = submissionExecutionFactory.create(submissionId);
 
-        submissionExecutionRepository.insert(execution);
+        Long executionId = submissionExecutionRepository.insert(execution);
 
-        eventProducer.execute(new Event(project.getUrl(), project.getId(),submissionId,execution.getId()));
+        eventProducer.execute(new Event(project.getUrl(), project.getId(),submissionId,executionId));
 
     }
     

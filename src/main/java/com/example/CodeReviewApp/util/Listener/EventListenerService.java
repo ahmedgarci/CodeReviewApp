@@ -16,7 +16,7 @@ public class EventListenerService {
 
     @RabbitListener(queues = "reviewCompletedQueue")
     public void handleReviewcompled(ReviewCompletedEvent event){
-
+        System.out.println("executing listener");
         eventCompletionService.handleSuccess(event);
 
     }

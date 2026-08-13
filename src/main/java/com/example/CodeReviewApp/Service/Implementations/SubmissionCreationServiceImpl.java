@@ -9,13 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.CodeReviewApp.Models.CodeFile;
 import com.example.CodeReviewApp.Models.Submission;
 import com.example.CodeReviewApp.Repo.CodeFileRepository;
-
 import com.example.CodeReviewApp.Repo.SubmissionRepository;
 import com.example.CodeReviewApp.Service.SubmissionCreationService;
-import com.example.CodeReviewApp.Service.ReviewsStrategy.ReviewStrategy;
-import com.example.CodeReviewApp.Service.ReviewsStrategy.ReviewStrategyResolver;
 import com.example.CodeReviewApp.dto.Submissions.In.PublishReviewDto;
-import com.example.CodeReviewApp.dto.Submissions.In.ReviewContext;
 import com.example.CodeReviewApp.mapper.SubmissionFactory;
 import com.example.CodeReviewApp.security.Cache.Idempotent;
 import com.example.CodeReviewApp.util.Auth.AuthenticationContext;
@@ -35,8 +31,6 @@ public class SubmissionCreationServiceImpl implements SubmissionCreationService{
     private final CodeFileRepository codefFileRepository;
     private final AuthenticationContext authenticationContext;
     private final SubmissionFactory submissionFactory;
-    private final ReviewStrategyResolver strategyResolver;
-
 
     @Override
     @Transactional
@@ -58,10 +52,6 @@ public class SubmissionCreationServiceImpl implements SubmissionCreationService{
             List<CodeFile> uploadedFiles = fileService.uploadFiles(submissionId, files);
     
             for(CodeFile file : uploadedFiles) codefFileRepository.insert(file);
-
-            ReviewStrategy reviewStrategy = strategyResolver.resolve(reviewDto.getStrategy());
-
-            reviewStrategy.execute(new ReviewContext(submissionId, projectId, reviewDto.getReviewers()));
 
             fileService.moveFilesToPermanentStorage(submissionId);
             

@@ -14,6 +14,8 @@ public class ReviewContext {
 
     private Long projectId;
 
+    private Long executionId;
+
     private List<Long> reviewers;
 
 }

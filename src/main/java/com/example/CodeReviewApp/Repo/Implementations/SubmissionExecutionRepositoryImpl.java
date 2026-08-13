@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.example.CodeReviewApp.Models.SubmissionExecution;
 import com.example.CodeReviewApp.Models.Enums.SubmissionExecutionStatus;
 import com.example.CodeReviewApp.Repo.SubmissionExecutionRepository;
+import com.example.jooq.tables.records.SubmissionExecutionRecord;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,12 +18,17 @@ public class SubmissionExecutionRepositoryImpl implements SubmissionExecutionRep
 
     private final DSLContext dsl;
 
-    @Override
-    public void insert(SubmissionExecution submission) {
+   @Override
+    public Long insert(SubmissionExecution submission) {
 
-        dsl.insertInto(SUBMISSION_EXECUTION).columns(SUBMISSION_EXECUTION.SUBMISSION_ID,SUBMISSION_EXECUTION.STATUS,SUBMISSION_EXECUTION.STARTED_AT).values(submission.getSubmission_id(),submission.getStatus().name(),submission.getStarted_at()).execute();
+    SubmissionExecutionRecord result = dsl.insertInto(SUBMISSION_EXECUTION)
+        .columns(SUBMISSION_EXECUTION.SUBMISSION_ID, SUBMISSION_EXECUTION.STATUS, SUBMISSION_EXECUTION.STARTED_AT)
+        .values(submission.getSubmission_id(), submission.getStatus().name(), submission.getStarted_at())
+        .returning(SUBMISSION_EXECUTION.ID)
+        .fetchOne();
 
-    }
+    return result.getValue(SUBMISSION_EXECUTION.ID);
+}
 
     @Override
     public void updateStatus(Long executionId, SubmissionExecutionStatus target) {
