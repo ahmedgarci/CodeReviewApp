@@ -7,6 +7,8 @@ import com.example.CodeReviewApp.dto.Project.In.CreateProjectDto;
 import com.example.CodeReviewApp.dto.Project.Out.ProjectDetails;
 import com.example.CodeReviewApp.dto.User.UserDto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class ProjectPrésentation {
     
     
     @PostMapping()
-    public ResponseEntity<?> insertProject(@RequestBody CreateProjectDto request) {
+    public ResponseEntity<?> insertProject(@RequestBody @Valid CreateProjectDto request) {
 
         projectService.createProject(request);
 
@@ -39,7 +41,7 @@ public class ProjectPrésentation {
     }
     
     @GetMapping("/{ProjectId}")
-    public ResponseEntity<List<UserDto>> getProjectCollab(@PathVariable(name = "ProjectId") Long ProjectId) {
+    public ResponseEntity<List<UserDto>> getProjectCollab(@PathVariable(name = "ProjectId") @Positive Long ProjectId) {
 
         return  ResponseEntity.status(HttpStatus.OK).body(projectService.getProjectCollaborators(ProjectId));
         

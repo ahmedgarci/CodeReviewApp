@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.CodeReviewApp.Service.CommentService;
 import com.example.CodeReviewApp.dto.Comments.In.CreateCommentDto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +28,7 @@ public class CommentsPresentation {
     
 
     @PostMapping("/{submissionId}/{codeId}")
-    public ResponseEntity<Void> createComment(@RequestBody CreateCommentDto dto,@PathVariable Long submissionId,@PathVariable Long codeId) {
+    public ResponseEntity<Void> createComment(@RequestBody @Valid CreateCommentDto dto,@PathVariable @Positive Long submissionId,@PathVariable @Positive Long codeId) {
 
         commentService.create(dto, submissionId, codeId);
 

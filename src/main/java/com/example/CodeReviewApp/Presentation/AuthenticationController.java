@@ -8,6 +8,7 @@ import com.example.CodeReviewApp.dto.Authentication.In.RegistrationDto;
 import com.example.CodeReviewApp.dto.Authentication.Out.SuccessFulAuthentication;
 import com.example.CodeReviewApp.security.AuthenticationService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> registerUser(@RequestBody RegistrationDto request) {
+    public ResponseEntity<Void> registerUser(@RequestBody @Valid RegistrationDto request) {
         
         authenticationService.register(request);
 
@@ -33,9 +34,10 @@ public class AuthenticationController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<SuccessFulAuthentication> authenticateUser(@RequestBody LoginDto request) {
+    public ResponseEntity<SuccessFulAuthentication> authenticateUser(@RequestBody @Valid LoginDto request) {
         
         return ResponseEntity.ok(authenticationService.authenticateUser(request));    
+
     }
 
 
