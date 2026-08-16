@@ -13,4 +13,9 @@ public class NotificationFactory {
         return Notification.builder().title(title).message(message).sent_at(LocalDateTime.now()).userId(userId).build();
     }
 
+    public com.example.CodeReviewApp.dto.Notification.Out.Notification toNotificationResponse(Notification notification){
+
+        return new com.example.CodeReviewApp.dto.Notification.Out.Notification(notification.getTitle(),notification.getMessage(),notification.getSent_at());
+    }
+
 }

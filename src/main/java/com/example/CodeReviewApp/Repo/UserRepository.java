@@ -15,4 +15,7 @@ public interface UserRepository {
 
     boolean usersExist(List<Long> userIds);
 
+    // this is for wbesocket connection
+    String getUserEmailById(Long id);
+
 }

@@ -64,4 +64,12 @@ public class JooqUserRepoImpl implements UserRepository {
         return count == userIds.size();
     }
 
+
+     @Override
+     public String getUserEmailById(Long id) {
+
+        return dsl.select(USERS.EMAIL).from(USERS).where(USERS.ID.eq(id)).fetchOneInto(String.class);
+
+    }
+
 }
