@@ -24,7 +24,7 @@ public class FilterChainConfig {
             .csrf(csrf -> csrf.disable())
 //            .exceptionHandling((ex)-> ex.authenticationEntryPoint(new RestAuthenticationEntryPoint()))
             .authorizeHttpRequests((request) -> request.requestMatchers(
-                    "/auth/**" 
+                    "/auth/**" ,"/ws/**"
                                                         ).permitAll()
                                                         .anyRequest()
                                                         .authenticated()
