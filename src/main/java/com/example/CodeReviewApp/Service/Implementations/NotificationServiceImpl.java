@@ -27,8 +27,11 @@ public class NotificationServiceImpl  implements NotificationService{
     @Override
     public void sendNotification(Notification notification,String  toUser) {
 
-        messagingTemplate.convertAndSendToUser(toUser.toString(),"/notifications",notification);
-
+        System.out.println("========== SENDING ==========");
+        
+        messagingTemplate.convertAndSendToUser(toUser.toString(),"/queue/notifications"notification);
+        
+        System.out.println("========== SENT ==========");
     }
 
     @Override
