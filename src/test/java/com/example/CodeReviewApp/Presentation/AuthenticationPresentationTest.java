@@ -19,8 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.CodeReviewApp.dto.Authentication.In.LoginDto;
 import com.example.CodeReviewApp.dto.Authentication.Out.SuccessFulAuthentication;
-import com.example.CodeReviewApp.security.AuthenticationService;
 import com.example.CodeReviewApp.security.JwtService;
+import com.example.CodeReviewApp.security.Auth.AuthenticationService;
 
 @WebMvcTest(AuthenticationController.class)
 @AutoConfigureMockMvc(addFilters = false)

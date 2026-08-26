@@ -29,7 +29,7 @@ public class NotificationServiceImpl  implements NotificationService{
 
         System.out.println("========== SENDING ==========");
         
-        messagingTemplate.convertAndSendToUser(toUser.toString(),"/queue/notifications"notification);
+        messagingTemplate.convertAndSendToUser(toUser.toString(),"/queue/notifications",notification);
         
         System.out.println("========== SENT ==========");
     }

@@ -24,8 +24,8 @@ import com.example.CodeReviewApp.exceptions.BadCredentials;
 import com.example.CodeReviewApp.exceptions.RessourceAlreadyExists;
 import com.example.CodeReviewApp.exceptions.RessourceNotFoundException;
 import com.example.CodeReviewApp.mapper.UserFactory;
-import com.example.CodeReviewApp.security.AuthenticationService;
 import com.example.CodeReviewApp.security.JwtService;
+import com.example.CodeReviewApp.security.Auth.AuthenticationService;
 import com.example.CodeReviewApp.util.Auth.AuthenticationGuard;
 
 @ExtendWith(MockitoExtension.class)

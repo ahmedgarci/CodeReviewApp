@@ -1,31 +1,32 @@
 package com.example.CodeReviewApp.util.Auth;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+
+import com.example.CodeReviewApp.security.Cache.JwtSession;
+import com.github.benmanes.caffeine.cache.Cache;
+
+import lombok.RequiredArgsConstructor;
 
 
 
 @Component
+@RequiredArgsConstructor
 public class AuthenticationGuard {
 
+    private final Cache<String, JwtSession> authenticatedUsers ;
 
-    private final Map<String, AuthenticationSession> authenticatedUsers = new ConcurrentHashMap<>();
+    public boolean checkUserConnectivity(@NonNull String email,@NonNull String token) {
 
+        JwtSession session = authenticatedUsers.getIfPresent(email);
 
-    public boolean checkUserConnectivity(String email) {
+        if(session == null || !session.token().equals(token) || session.expiresAt().isBefore(LocalDateTime.now()) ) {
 
-        AuthenticationSession session = authenticatedUsers.get(email);
+            disconnectUser(email);            
 
-        if(session == null) {
-            return false;
-        }
-
-        if(session.expiresAt().isBefore(LocalDateTime.now())) {
-            authenticatedUsers.remove(email);
             return false;
         }
 
@@ -34,7 +35,7 @@ public class AuthenticationGuard {
 
     public void connectUser(String email,String token,LocalDateTime expiresAt){
 
-        AuthenticationSession session = new AuthenticationSession(token, expiresAt);
+        JwtSession session = new JwtSession(token, expiresAt);
 
         authenticatedUsers.put(email, session);
 
@@ -42,7 +43,7 @@ public class AuthenticationGuard {
 
     public void disconnectUser(String email){
 
-        authenticatedUsers.remove(email);
+        authenticatedUsers.invalidate(email);
 
     }
 

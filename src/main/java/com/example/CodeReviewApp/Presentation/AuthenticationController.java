@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.CodeReviewApp.dto.Authentication.In.LoginDto;
 import com.example.CodeReviewApp.dto.Authentication.In.RegistrationDto;
 import com.example.CodeReviewApp.dto.Authentication.Out.SuccessFulAuthentication;
-import com.example.CodeReviewApp.security.AuthenticationService;
+import com.example.CodeReviewApp.security.Auth.AuthenticationService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.example.CodeReviewApp.exceptions.JwtAuthenticationException;
+import com.example.CodeReviewApp.security.Auth.RestAuthenticationEntryPoint;
+import com.example.CodeReviewApp.util.Auth.AuthenticationGuard;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -24,6 +27,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsServiceImpl;
+    private final AuthenticationGuard authenticationGuard;
+    private final RestAuthenticationEntryPoint entryPoint;
 
     @Override
     protected void doFilterInternal(
@@ -52,14 +57,21 @@ public class JwtFilter extends OncePerRequestFilter {
                 UserDetails user = userDetailsServiceImpl.loadUserByUsername(username);
     
                 if(jwtService.isTokenValid(token,user.getUsername())) {
+
+                    boolean  isValid = authenticationGuard.checkUserConnectivity(user.getUsername(),token);
+
+                    if(!isValid){
+
+                        entryPoint.commence(request, response, new JwtAuthenticationException("invalid jwt "));
+
+                        return;
+                    }
     
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
     
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-            }
-    
-    
+            }    
         } catch(JwtException e) {
             
             SecurityContextHolder.clearContext();

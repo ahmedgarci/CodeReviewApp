@@ -21,5 +21,9 @@ public class CacheConfiguration {
            .build();
 
     }
+    @Bean
+    public Cache<String,JwtSession> jwtCache(){
+        return Caffeine.newBuilder().expireAfterWrite(Duration.ofHours(1)).maximumSize(1000).build();
+    }
     
 }

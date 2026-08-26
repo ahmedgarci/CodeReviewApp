@@ -1,4 +1,4 @@
-package com.example.CodeReviewApp.security;
+package com.example.CodeReviewApp.security.Auth;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -15,6 +15,7 @@ import com.example.CodeReviewApp.exceptions.BadCredentials;
 import com.example.CodeReviewApp.exceptions.RessourceAlreadyExists;
 import com.example.CodeReviewApp.exceptions.RessourceNotFoundException;
 import com.example.CodeReviewApp.mapper.UserFactory;
+import com.example.CodeReviewApp.security.JwtService;
 import com.example.CodeReviewApp.util.Auth.AuthenticationGuard;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationGuard authenticationGuard;
-
     
     public void register(RegistrationDto registrationDto){
 
@@ -60,7 +60,7 @@ public class AuthenticationService {
 
         String token = jwtService.generateJwt(user.getEmail(), new HashMap<>(),tokenExpiration);
 
-        authenticationGuard.connectUser(token, token, tokenExpiration);
+        authenticationGuard.connectUser(user.getEmail(), token, tokenExpiration);
 
         return new SuccessFulAuthentication(user.getUsername(),user.getEmail(), token,tokenExpiration);
 

@@ -1,4 +1,4 @@
-package com.example.CodeReviewApp.security;
+package com.example.CodeReviewApp.security.Auth;
 
 import java.io.IOException;
 
