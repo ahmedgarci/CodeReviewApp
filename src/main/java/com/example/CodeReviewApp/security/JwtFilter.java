@@ -60,6 +60,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                     boolean  isValid = authenticationGuard.checkUserConnectivity(user.getUsername(),token);
 
+
                     if(!isValid){
 
                         entryPoint.commence(request, response, new JwtAuthenticationException("invalid jwt "));

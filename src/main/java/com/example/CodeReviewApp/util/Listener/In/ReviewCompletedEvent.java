@@ -13,4 +13,6 @@ public class ReviewCompletedEvent {
     Long projectId;
     Long executionId;
     List<SonarIssue> issues;
+    SonarMetric metric;
+
 }

@@ -22,12 +22,13 @@ public class ProjectRepositoryImpl implements ProjectRepository{
     private final DSLContext dsl;
 
     @Override
-    public void insertProject(Project project) {
+    public ProjectDetails insertProject(Project project) {
 
-        Long projectId=  dsl.insertInto(PROJECT).columns(PROJECT.NAME,PROJECT.URL,PROJECT.OWNER_ID).values(project.getName(),project.getUrl(),project.getOwner_id()).returning(PROJECT.ID).fetchOne().get(PROJECT.ID);       
+        ProjectDetails details =  dsl.insertInto(PROJECT).columns(PROJECT.NAME,PROJECT.URL,PROJECT.OWNER_ID).values(project.getName(),project.getUrl(),project.getOwner_id()).returning(PROJECT.fields()).fetchOneInto(ProjectDetails.class);       
         
-        dsl.insertInto(PROJECT_MEMBERS).columns(PROJECT_MEMBERS.PROJECT_ID,PROJECT_MEMBERS.USER_ID).values(projectId,project.getOwner_id()).execute();
+        dsl.insertInto(PROJECT_MEMBERS).columns(PROJECT_MEMBERS.PROJECT_ID,PROJECT_MEMBERS.USER_ID).values(details.getId(),project.getOwner_id()).execute();
 
+        return details;
     }
 
     @Override

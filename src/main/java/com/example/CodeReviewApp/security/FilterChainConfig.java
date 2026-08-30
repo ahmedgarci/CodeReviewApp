@@ -37,8 +37,7 @@ public class FilterChainConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .logout(logout -> logout.logoutUrl("/logout").addLogoutHandler(logoutHandlerImpl)
-           .logoutSuccessHandler((request, response, authentication) ->
-                        response.setStatus(HttpServletResponse.SC_OK))
+        .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK))
         );
 
 

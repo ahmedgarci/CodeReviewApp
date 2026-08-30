@@ -35,9 +35,9 @@ public class ProjectPrésentation {
     @PostMapping()
     public ResponseEntity<?> insertProject(@RequestBody @Valid CreateProjectDto request) {
 
-        projectService.createProject(request);
+        ProjectDetails projectDetails= projectService.createProject(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return new ResponseEntity<>(projectDetails,HttpStatus.CREATED);
     }
     
     @GetMapping("/{ProjectId}")

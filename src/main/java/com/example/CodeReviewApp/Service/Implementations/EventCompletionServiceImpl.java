@@ -4,10 +4,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.CodeReviewApp.Models.Notification;
+import com.example.CodeReviewApp.Models.ProjectQualitySettings;
 import com.example.CodeReviewApp.Models.Submission;
 import com.example.CodeReviewApp.Models.SubmissionExecution;
 import com.example.CodeReviewApp.Models.Enums.SubmissionExecutionStatus;
 import com.example.CodeReviewApp.Repo.IssuesRepository;
+import com.example.CodeReviewApp.Repo.ProjectQualityGateSettingsRepository;
 import com.example.CodeReviewApp.Repo.SubmissionExecutionRepository;
 import com.example.CodeReviewApp.Repo.SubmissionRepository;
 import com.example.CodeReviewApp.Repo.UserRepository;
@@ -16,6 +18,7 @@ import com.example.CodeReviewApp.Service.NotificationService;
 import com.example.CodeReviewApp.mapper.NotificationFactory;
 import com.example.CodeReviewApp.util.Listener.In.ReviewCompletedEvent;
 import com.example.CodeReviewApp.util.Listener.In.ReviewFailureEvent;
+import com.example.CodeReviewApp.util.Listener.In.SonarMetric;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +33,7 @@ public class EventCompletionServiceImpl implements EventCompletionService{
     private final NotificationService notificationService;
     private final NotificationFactory notificationFactory;
     private final UserRepository userRepository;
+    private final ProjectQualityGateSettingsRepository projectSettingsRepository;
 
     @Override
     @Transactional
@@ -53,7 +57,22 @@ public class EventCompletionServiceImpl implements EventCompletionService{
             
         }
 
-        submissionExecutionRepository.updateStatus(executionProcessEntity.getId(), SubmissionExecutionStatus.COMPLETED);
+        ProjectQualitySettings projectSettings = projectSettingsRepository.getSettingsByProjectId(submission.getProject_id());
+
+        SonarMetric metrics = event.getMetric();
+
+        if(projectSettings.isEnabled() && projectSettings.getMax_bugs() < metrics.bugs() || projectSettings.getMax_code_smells() < metrics.codeSmells()
+         || projectSettings.getMax_vulnerabilities() < metrics.vulnerabilities() || projectSettings.getMin_coverage() < metrics.coverage()){
+
+            // to save metrics
+            
+            submissionExecutionRepository.updateFailure(executionProcessEntity.getId(), SubmissionExecutionStatus.FAILED, "tests filed because the project settings are enabled");
+
+        }else{
+
+            submissionExecutionRepository.updateStatus(executionProcessEntity.getId(), SubmissionExecutionStatus.COMPLETED);
+
+        }
 
         String to = userRepository.getUserEmailById(submission.getSubmitter());
 

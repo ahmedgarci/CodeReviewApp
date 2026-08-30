@@ -30,7 +30,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional
-    public void createProject(CreateProjectDto createProjectDto) {
+    public ProjectDetails createProject(CreateProjectDto createProjectDto) {
         
         // check uniqueneess to avoid duplicates
 
@@ -38,8 +38,9 @@ public class ProjectServiceImpl implements ProjectService {
 
         project.setOwner_id(authenticationContext.getCurrentUser().getId());
 
-        projectRepository.insertProject(project);
+        ProjectDetails details = projectRepository.insertProject(project);
 
+        return details;
     }
 
 

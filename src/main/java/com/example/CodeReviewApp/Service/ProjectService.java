@@ -8,7 +8,7 @@ import com.example.CodeReviewApp.dto.User.UserDto;
 
 public interface ProjectService {
 
-    void createProject(CreateProjectDto createProjectDto);
+    ProjectDetails createProject(CreateProjectDto createProjectDto);
 
     List<UserDto> getProjectCollaborators(Long project_id);
 

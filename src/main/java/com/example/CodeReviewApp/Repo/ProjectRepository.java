@@ -8,7 +8,7 @@ import com.example.CodeReviewApp.dto.Project.Out.ProjectDetails;
 
 public interface ProjectRepository {
     
-    void insertProject(Project project);
+    ProjectDetails insertProject(Project project);
 
     List<ProjectDetails> getUserInvolvedProjects(Long user_id);
 
