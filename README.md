@@ -110,18 +110,15 @@ Main entities:
 * Database design
 * RabbitMQ messaging
 * Frontend interface
-
-### In Progress
-
 * Worker Service
 * Repository cloning
 * SonarQube execution
 * Issue persistence
 * Worker status updates
-
-### Planned
-
 * Notifications
+
+### In Progress
+* Quality Gate Checker 
 * Dashboard improvements
 * CI/CD deployment
 
