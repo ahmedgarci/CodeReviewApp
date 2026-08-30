@@ -128,14 +128,7 @@ Main entities:
 
 The project is still under development.
 
-Current work focuses on the Worker Service. Some configuration issues remain, particularly around:
-
-* RabbitMQ integration
-* SonarQube execution
-* Docker configuration
-* Worker environment setup
-
-These are expected development-stage issues and will be resolved as the worker implementation is completed.
+Current work focuses on the Worker Service. Some configuration issues remain.
 
 ---
 
@@ -147,5 +140,3 @@ These are expected development-stage issues and will be resolved as the worker i
 # Future Improvements
 * Multi-language analysis support
 
-
-If you'd like, I can also Create a GitHub-style README with badges, screenshots placeholders, a table of contents, and a cleaner layout similar to popular open-source repositories.
