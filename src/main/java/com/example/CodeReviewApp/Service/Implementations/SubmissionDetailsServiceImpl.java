@@ -70,9 +70,11 @@ public class SubmissionDetailsServiceImpl  implements SubmissionDetailsService{
     
     }
 
+    if(submission.getReviewType().equals("SONARQUBE")) return submission;
+
     List<String> labels = submissionLabelsRepository.getSubmissionLabels(submissionId);
 
-    submission.setLabels(labels);
+    submission.getHumanReviewResponse().setLabels(labels);
 
     return submission;
     
