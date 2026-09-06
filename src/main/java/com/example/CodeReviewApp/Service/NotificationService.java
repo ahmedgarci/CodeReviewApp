@@ -6,7 +6,7 @@ import com.example.CodeReviewApp.dto.Notification.Out.Notification;
 
 public interface NotificationService {
     
-    public void sendNotification(Notification notification,String to_user);
+    public void sendNotification(String to_user,Long toUserId);
     public List<Notification> getAllNotifications();
 
 }

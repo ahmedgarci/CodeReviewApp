@@ -25,11 +25,13 @@ public class NotificationServiceImpl  implements NotificationService{
     private final AuthenticationContext authenticationContext;
 
     @Override
-    public void sendNotification(Notification notification,String  toUser) {
+    public void sendNotification(String  toUser, Long toUserId) {
 
-        System.out.println("========== SENDING ==========");
+        com.example.CodeReviewApp.Models.Notification  notif = notificationFactory.create("Project analyzed successfully", "Project was analyzed Successfully with sonarQube",toUserId);
         
-        messagingTemplate.convertAndSendToUser(toUser.toString(),"/queue/notifications",notification);
+        com.example.CodeReviewApp.dto.Notification.Out.Notification notificationResponse = notificationFactory.toNotificationResponse(notif);
+        
+        messagingTemplate.convertAndSendToUser(toUser.toString(),"/queue/notifications",notificationResponse);
         
         System.out.println("========== SENT ==========");
     }
