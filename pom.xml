@@ -170,7 +170,7 @@
     <configuration>
         <jdbc>
             <driver>org.postgresql.Driver</driver>
-            <url>jdbc:postgresql://localhost:5432/code_review_db</url>
+  <url>jdbc:postgresql://localhost:5432/code_review_db</url>
             <user>postgres</user>
             <password></password>
         </jdbc>

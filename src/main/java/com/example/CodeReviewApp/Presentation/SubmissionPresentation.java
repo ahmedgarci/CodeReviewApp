@@ -1,6 +1,7 @@
 package com.example.CodeReviewApp.Presentation;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,9 +60,12 @@ public class SubmissionPresentation {
     
 
     @GetMapping("/{projectId}")
-    public ResponseEntity<List<ProjectSubmissionsDto>> getProjectSubmission(@PathVariable @Positive  Long projectId) {
+    public ResponseEntity<List<ProjectSubmissionsDto>> getProjectSubmission(@PathVariable @Positive  Long projectId,
+        @RequestParam (name = "page",required = true,defaultValue = "0") int page,
+        @RequestParam(name = "size",required = true,defaultValue = "10") int size 
+    ) {
 
-        return ResponseEntity.ok().body(submissionDetailsService.getProjectSubmissions(projectId));
+        return ResponseEntity.ok().body(submissionDetailsService.getProjectSubmissions(projectId,page,size));
 
     }
 

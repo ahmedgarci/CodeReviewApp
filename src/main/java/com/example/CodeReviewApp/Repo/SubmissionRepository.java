@@ -11,11 +11,13 @@ public interface SubmissionRepository {
 
     Long insertSubmission(Submission submission);
 
-    List<ProjectSubmissionsDto> getProjectSubmissions(Long projectId);
+    List<ProjectSubmissionsDto> getProjectSubmissions(Long projectId,int page,int size);
 
     SubmissionDetailsDto getSubmissionDetails(Long submissionId);
 
     Submission getSubmission(Long submissionId);
+
+    Submission getSubmissionForUpdate(Long submissionId);
 
     void updateSubmissionStatus(Long submissionId,SubmissionStatus target);
 

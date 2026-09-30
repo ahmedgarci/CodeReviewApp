@@ -1,20 +1,23 @@
 package com.example.CodeReviewApp.Presentation;
 
+import com.example.CodeReviewApp.Service.ProjectService;
+import com.example.CodeReviewApp.dto.Project.In.CreateProjectDto;
+import com.example.CodeReviewApp.dto.Project.Out.ProjectDetails;
+import com.example.CodeReviewApp.dto.User.UserDto;
+import com.example.CodeReviewApp.security.JwtService;
+import com.example.CodeReviewApp.security.JwtFilter;
+import com.example.CodeReviewApp.security.Auth.RestAuthenticationEntryPoint;
+import com.example.CodeReviewApp.util.Auth.AuthenticationGuard;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-
 import org.springframework.test.web.servlet.MockMvc;
 
-
-import com.example.CodeReviewApp.Service.ProjectService;
-import com.example.CodeReviewApp.dto.Project.In.CreateProjectDto;
-import com.example.CodeReviewApp.dto.Project.Out.ProjectDetails;
-import com.example.CodeReviewApp.dto.User.UserDto;
-import com.example.CodeReviewApp.security.JwtService;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -22,20 +25,28 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.List;
-
 @WebMvcTest(ProjectPrésentation.class)
 @AutoConfigureMockMvc(addFilters = false)
 public class ProjectPresentationTest {
-    
-    @MockBean
-    private JwtService jwtService;
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private ProjectService projectService;
+
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private AuthenticationGuard authenticationGuard;
+
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @MockBean
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
 
     @Test
     public void shouldCreateProject()throws Exception{

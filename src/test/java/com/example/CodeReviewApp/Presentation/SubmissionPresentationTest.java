@@ -1,5 +1,6 @@
 package com.example.CodeReviewApp.Presentation;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,8 @@ import com.example.CodeReviewApp.dto.Submissions.Out.FileContentResponseDto;
 import com.example.CodeReviewApp.dto.Submissions.Out.ProjectSubmissionsDto;
 import com.example.CodeReviewApp.dto.Submissions.Out.SubmissionDetailsDto;
 import com.example.CodeReviewApp.security.JwtService;
+import com.example.CodeReviewApp.security.Auth.RestAuthenticationEntryPoint;
+import com.example.CodeReviewApp.util.Auth.AuthenticationGuard;
 
 @WebMvcTest(SubmissionPresentation.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -41,10 +45,21 @@ public class SubmissionPresentationTest {
 
     @MockBean
     private SubmissionCreationService submissionCreationService;
+
     @MockBean
     private SubmissionDetailsService submissionDetailsService;
+
     @MockBean
     private RepoReviewService repoReviewService;
+
+    @MockBean
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    @MockBean
+    private AuthenticationGuard authenticationGuard;
+
+
+    
 
     @Test
     public void shouldCreateSubmission() throws Exception{
@@ -98,13 +113,12 @@ public class SubmissionPresentationTest {
         verify(submissionDetailsService).getProjectSubmissions(projectId);
 
     }
-
-    @Test
+    
     public void shouldGetSubmissionDetails()throws Exception{
 
         Long submissionId  = 10L;
 
-        SubmissionDetailsDto detailsDto = new SubmissionDetailsDto();
+        SubmissionDetailsDto detailsDto = new SubmissionDetailsDto(1L,LocalDateTime.now(),any(),any()," ");
 
         when(submissionDetailsService.getSubmissionDetails(submissionId)).thenReturn(detailsDto);
 

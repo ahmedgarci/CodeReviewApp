@@ -32,7 +32,7 @@ public class InvitationPresentation {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/accept")
+    @PostMapping
     public ResponseEntity<Void> acceptInvitation(@RequestParam(name = "token",required = true) String token) {
 
         invitationService.acceptInvitation(token);

@@ -31,7 +31,6 @@ public class ProjectSettingsPresentation {
     @GetMapping("/{projectId}")
     public ResponseEntity<ProjectQualitySettingsDto> getProjectSettings( @Positive @PathVariable(required = true)  Long projectId) {
 
-
         return  ResponseEntity.ok(settingsService.getProjectSettings(projectId));
 
     }

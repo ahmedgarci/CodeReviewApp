@@ -10,7 +10,7 @@ import com.example.CodeReviewApp.dto.Submissions.Out.SubmissionDetailsDto;
 
 public interface SubmissionDetailsService {
     
-    List<ProjectSubmissionsDto> getProjectSubmissions(Long projectId);
+    List<ProjectSubmissionsDto> getProjectSubmissions(Long projectId,int page,int size);
 
     SubmissionDetailsDto getSubmissionDetails(Long submissionId);
 

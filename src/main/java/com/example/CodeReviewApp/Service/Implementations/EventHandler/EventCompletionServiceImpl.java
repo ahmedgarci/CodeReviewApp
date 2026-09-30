@@ -42,6 +42,8 @@ public class EventCompletionServiceImpl implements EventCompletionService{
     @Transactional
     public void handleSuccess(ReviewCompletedEvent event) {
 
+        System.out.println("p_id : "+event.getProjectId() + " sub_id :"+ event.getSubmissionId() + " exec : "+event.getExecutionId());
+
         Submission submission = submissionRepository.getSubmission(event.getSubmissionId());
 
         submissionValidationService.validateSubmissionProjectId(event, submission);
@@ -53,7 +55,7 @@ public class EventCompletionServiceImpl implements EventCompletionService{
         boolean isValid = submissionValidationService.validateExecutionProcessStatus(executionProcessEntity);
         
         if(!isValid) return;
-
+        
         issueService.saveIssues(event, submission);
 
         ProjectQualitySettings projectSettings = projectSettingsRepository.getSettingsByProjectId(submission.getProject_id());

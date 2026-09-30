@@ -39,9 +39,11 @@ public class AuthServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private JwtService jwtService;
+
     @Mock
     private AuthenticationGuard authenticationGuard;
 
+    
     @InjectMocks
     private AuthenticationService authenticationService;
 

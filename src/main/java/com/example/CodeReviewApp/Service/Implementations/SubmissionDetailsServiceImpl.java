@@ -3,6 +3,7 @@ package com.example.CodeReviewApp.Service.Implementations;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.CodeReviewApp.Models.CodeFile;
 import com.example.CodeReviewApp.Models.Submission;
@@ -41,7 +42,7 @@ public class SubmissionDetailsServiceImpl  implements SubmissionDetailsService{
 
 
 
-    public List<ProjectSubmissionsDto> getProjectSubmissions(Long projectId){
+    public List<ProjectSubmissionsDto> getProjectSubmissions(Long projectId,int page,int size){
 
         User authenticatedUser = authenticationContext.getCurrentUser();
 
@@ -51,7 +52,7 @@ public class SubmissionDetailsServiceImpl  implements SubmissionDetailsService{
 
         }
 
-        List<ProjectSubmissionsDto> submissions = submissionRepository.getProjectSubmissions(projectId);
+        List<ProjectSubmissionsDto> submissions = submissionRepository.getProjectSubmissions(projectId,page,size);
 
         if (submissions == null || submissions.isEmpty()) return List.of();
 
@@ -106,9 +107,10 @@ public class SubmissionDetailsServiceImpl  implements SubmissionDetailsService{
 
 
     @Override
+    @Transactional 
     public void updateSubmissionStatus(Long submissionId, SubmissionStatus target) {
 
-        Submission submission = submissionRepository.getSubmission(submissionId);
+        Submission submission = submissionRepository.getSubmissionForUpdate(submissionId);
 
         if(submission == null) throw new RessourceNotFoundException("submission not found");
 

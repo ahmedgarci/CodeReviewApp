@@ -17,9 +17,18 @@ public class MailingService {
     public void sendEmail(String to, String subject, String token) {
 
     SimpleMailMessage message = new SimpleMailMessage();
+    
+    String invitationUrl = "http://localhost:5173/invitation?code=" + token;
+    String body = String.format(
+            """
+            You have received an invitation to collaborate on a project.
 
-    String body = String.format("u have received an invtation collaborate in a project . code : %s", token);
-
+            Click the link below to accept the invitation:
+            %s
+            """,
+            invitationUrl
+            );
+          
     message.setTo(to);
     
     message.setSubject(subject);

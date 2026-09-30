@@ -34,9 +34,9 @@ public class InvitationServiceImpl implements InvitationService {
     @Override
     public void sendInvitation(InvitationDto dto,Long project_id) {
         
-        User receiver = userRepository.findByEmail(dto.email()).orElseThrow(()-> new RessourceNotFoundException("receiver_email"));
-
-        if(projectMembersRepository.isUserAlreadyMemberOfProject(project_id, receiver.getId())) return;
+        User receiver = userRepository.findByEmail(dto.email()).orElseThrow(()-> new RessourceNotFoundException("receiver was not found"));
+        // to handle
+        if(projectMembersRepository.isUserAlreadyMemberOfProject(project_id, receiver.getId())) ;
 
         String token = generateInvitationToken();
 

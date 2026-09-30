@@ -32,6 +32,7 @@ public class HumanReviewService implements ReviewStrategy{
             throw new RessourceNotFoundException("Invalid reviewers");
         
         }
+        
         reviewAssigneesRepository.insert(context.getSubmissionId(),reviewers);
 
         return new ReviewResult("Reviewers assigned",reviewers);

@@ -45,8 +45,8 @@ public class SubmissionRepositoryImpl implements SubmissionRepository {
                 .getId();
         }
 
-    public List<ProjectSubmissionsDto> getProjectSubmissions(Long projectId) {
-
+    public List<ProjectSubmissionsDto> getProjectSubmissions(Long projectId,int page,int size) {
+        int offset = page*size;
         return dsl.select(
                 SUBMISSION.ID,
                 SUBMISSION.TITLE,
@@ -56,6 +56,8 @@ public class SubmissionRepositoryImpl implements SubmissionRepository {
                 .join(USERS).on(SUBMISSION.SUBMITTER.eq(USERS.ID))
                 .where(SUBMISSION.PROJECT_ID.eq(projectId))
                 .orderBy(SUBMISSION.ID.desc())
+                .limit(size)
+                .offset(offset)
                 .fetchInto(ProjectSubmissionsDto.class);
 
     }
@@ -68,11 +70,13 @@ public class SubmissionRepositoryImpl implements SubmissionRepository {
                 SUBMISSION.TITLE,
                 SUBMISSION.DESCRIPTION,
                 SUBMISSION.STATUS,
+                SUBMISSION.REVIEW_TYPE.as("review_type"),
                 USERS.ID.as("author_id"),
                 USERS.USERNAME.as("author_username"))
                 .from(SUBMISSION)
                 .join(USERS)
                 .on(SUBMISSION.SUBMITTER.eq(USERS.ID))
+
                 .where(SUBMISSION.ID.eq(submissionId))
                 .fetchOne();
 
@@ -159,6 +163,11 @@ public class SubmissionRepositoryImpl implements SubmissionRepository {
         return true;
 
         }
+
+    @Override
+    public Submission getSubmissionForUpdate(Long submissionId) {
+        return dsl.selectFrom(SUBMISSION).where(SUBMISSION.ID.eq(submissionId)).forUpdate().fetchOneInto(Submission.class);
+    }
 
 
 }

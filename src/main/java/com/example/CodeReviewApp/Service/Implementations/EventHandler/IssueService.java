@@ -15,9 +15,8 @@ public class IssueService {
     private final IssuesRepository issuesRepository;
 
     public void saveIssues(ReviewCompletedEvent event,Submission submission) {
-
         if (event.getIssues() != null && !event.getIssues().isEmpty()) {
-            
+            System.out.println("Saving issues for submission: " + submission.getId());            
             issuesRepository.insert(event.getIssues(), submission.getId());
             
         }

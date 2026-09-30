@@ -19,7 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.example.CodeReviewApp.Service.CommentService;
 import com.example.CodeReviewApp.dto.Comments.In.CreateCommentDto;
 import com.example.CodeReviewApp.security.JwtService;
+import com.example.CodeReviewApp.util.Auth.AuthenticationGuard;
 
+import com.example.CodeReviewApp.security.Auth.RestAuthenticationEntryPoint;
 
 @WebMvcTest(CommentsPresentation.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -33,6 +35,12 @@ public class CommentPresentationTest {
 
     @MockBean
     private CommentService commentService;
+
+     @MockBean 
+    private  AuthenticationGuard authenticationGuard;
+
+    @MockBean
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Test
     public void shouldCreateComment()throws Exception{

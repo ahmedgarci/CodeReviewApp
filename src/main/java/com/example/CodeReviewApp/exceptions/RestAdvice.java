@@ -17,14 +17,14 @@ public class RestAdvice {
     @ExceptionHandler(RessourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleRessourceNotFound(RessourceNotFoundException exception){
         HttpStatus status = HttpStatus.NOT_FOUND;
-        return new ResponseEntity(new ErrorResponse(status.value(), exception.getMessage()),status);
-    }
+        return new ResponseEntity<>(new ErrorResponse(status.value(), exception.getMessage()),status);  
+  }
     
 
     @ExceptionHandler(RessourceAlreadyExists.class)
     public ResponseEntity<ErrorResponse> handleRessourceNotFound(RessourceAlreadyExists exception){
         HttpStatus status = HttpStatus.CONFLICT;
-        return new ResponseEntity(new ErrorResponse(status.value(), exception.getMessage()),status);
+        return new ResponseEntity<>(new ErrorResponse(status.value(), exception.getMessage()),status);
     }
 
     @ExceptionHandler(BadCredentials.class)
