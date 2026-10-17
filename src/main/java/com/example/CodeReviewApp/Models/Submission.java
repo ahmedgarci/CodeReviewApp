@@ -21,4 +21,5 @@ public class Submission {
     private Long project_id;
     private String description;
     private SubmissionStatus status;
+    private String review_type;
 }
