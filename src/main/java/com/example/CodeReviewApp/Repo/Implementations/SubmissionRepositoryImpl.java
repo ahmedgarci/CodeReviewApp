@@ -37,9 +37,10 @@ public class SubmissionRepositoryImpl implements SubmissionRepository {
     public Long insertSubmission(Submission submission) {
 
         return dsl.insertInto(SUBMISSION)
-                .columns(SUBMISSION.TITLE, SUBMISSION.DESCRIPTION, SUBMISSION.PROJECT_ID, SUBMISSION.SUBMITTER,SUBMISSION.STATUS)
+                .columns(SUBMISSION.TITLE, SUBMISSION.DESCRIPTION, SUBMISSION.PROJECT_ID, SUBMISSION.SUBMITTER,SUBMISSION.STATUS
+                    ,SUBMISSION.REVIEW_TYPE)
                 .values(submission.getTitle(), submission.getDescription(), submission.getProject_id(),
-                        submission.getSubmitter(),SubmissionStatus.PENDING.name())
+                        submission.getSubmitter(),SubmissionStatus.PENDING.name(),submission.getReview_type())
                 .returning(SUBMISSION.ID)
                 .fetchOne()
                 .getId();
