@@ -109,8 +109,9 @@ public class SubmissionPresentationTest {
         Long projectId = 1L;
 
         when(submissionDetailsService.getProjectSubmissions(anyLong(),anyInt(),anyInt())).thenReturn(expected);
-
-        mockMvc.perform(get("/submission/{projectId}", projectId,1L,10L))
+        mockMvc.perform(get("/submission/{projectId}", projectId)
+        .param("size", "10")
+        .param("page", "1"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$.length()").value(1));
