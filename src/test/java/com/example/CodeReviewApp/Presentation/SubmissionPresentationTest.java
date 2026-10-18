@@ -1,6 +1,8 @@
 package com.example.CodeReviewApp.Presentation;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -102,15 +104,18 @@ public class SubmissionPresentationTest {
     @Test
     public void shouldGetProjectSubmissions()throws Exception{
 
-        List<ProjectSubmissionsDto> expected = List.of(new ProjectSubmissionsDto()); 
+        List<ProjectSubmissionsDto> expected = List.of(new ProjectSubmissionsDto(1L,"title","author","PENDING")); 
 
         Long projectId = 1L;
 
-        when(submissionDetailsService.getProjectSubmissions(projectId)).thenReturn(expected);
+        when(submissionDetailsService.getProjectSubmissions(anyLong(),anyInt(),anyInt())).thenReturn(expected);
 
-        mockMvc.perform(get("/submission/{projectId}",projectId)).andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$.length()").value(1));
+        mockMvc.perform(get("/submission/{projectId}", projectId,1L,10L))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$.length()").value(1));
 
-        verify(submissionDetailsService).getProjectSubmissions(projectId);
+        verify(submissionDetailsService).getProjectSubmissions(anyLong(),anyInt(),anyInt());
 
     }
     
@@ -169,14 +174,5 @@ public class SubmissionPresentationTest {
 
 
 }
-
-
-// @PostMapping("/status/{submissionId}")
-// public ResponseEntity<Void> updateSubmissionStatus(@RequestBody SubmissionStatusDto submissionDto,@PathVariable Long submissionId) {
-    
-//     submissionDetailsService.updateSubmissionStatus(submissionId, submissionDto.status());
-
-//     return ResponseEntity.ok().build();
-// }
 
 
