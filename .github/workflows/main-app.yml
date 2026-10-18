@@ -44,6 +44,11 @@ jobs:
           DB_USERNAME: postgres
           DB_PASSWORD: postgres
         run: >
+          echo "Checking database configuration..."
+          test -n "$DB_URL" || exit 1
+          test -n "$DB_USERNAME" || exit 1
+          test -n "$DB_PASSWORD" || exit 1
+          
           mvn --batch-mode clean verify
           -Ddb.url="$DB_URL"
           -Ddb.user="$DB_USERNAME"
