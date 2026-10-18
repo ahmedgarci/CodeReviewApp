@@ -65,6 +65,7 @@ jobs:
       - name: Build and push backend image
         uses: docker/build-push-action@v6
         with:
+          context: .
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/code-review:latest
