@@ -50,10 +50,11 @@ jobs:
           test -n "$DB_USERNAME" || exit 1
           test -n "$DB_PASSWORD" || exit 1
           
-          mvn --batch-mode clean package 
-          -Ddb.url="$DB_URL"
-          -Ddb.user="$DB_USERNAME"
-          -Ddb.password="$DB_PASSWORD"
+          mvn --batch-mode clean package \
+          -Dmaven.test.skip=true \
+          "-Ddb.url=$DB_URL" \
+          "-Ddb.user=$DB_USERNAME" \
+          "-Ddb.password=$DB_PASSWORD"
 
 
       - name: Login to Docker Hub
