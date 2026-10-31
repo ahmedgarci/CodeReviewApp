@@ -46,7 +46,7 @@ public class RepositoryReviewServiceImpl  implements RepoReviewService{
 
         if(!isMember) throw new ActionNotAllowedException("user is not a member of this project");
 
-        Submission submission = Submission.builder().title("Project Aalyzed By SonarQube").project_id(project.getId()).submitter(user.getId()).status(SubmissionStatus.PENDING).build();
+        Submission submission = Submission.builder().title("Project Aalyzed By SonarQube").project_id(project.getId()).submitter(user.getId()).status(SubmissionStatus.PENDING).review_type("SONARQUBE").build();
 
         Long submissionId = submissionRepository.insertSubmission(submission);
 
