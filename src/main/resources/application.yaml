@@ -1,21 +1,21 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/code_review_db
-    username: postgres
-    password:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/code_review_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
 
   flyway:
     enabled: true
     baseline-on-migrate: true
-    url: jdbc:postgresql://localhost:5432/code_review_db
-    user: postgres
-    password:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/code_review_db}
+    user: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
 
   mail:
     port: 587
     host: smtp.gmail.com
-    username: 
-    password: 
+    username: ${MAIL_USERNAME: Ahmedgarci146@gmail.com}
+    password: ${MAIL_PASSWORD: password}
     properties:
       mail:
         smtp:
@@ -24,11 +24,21 @@ spring:
             enable: true
   
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    host: ${RABBIT_MQ_HOST:localhost}
+    port: ${RABBIT_MQ_PORT:5672}
+    username: ${RABBIT_MQ_USERNAME:guest}
+    password: ${RABBIT_MQ_PASSWORD:guest}
     
 server:
-  port: 8089
+  servlet:
+    context-path: /api
+  port: ${SERVER_PORT:8081}
 
+
+frontEnd:
+  url: http://localhost:5173
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
