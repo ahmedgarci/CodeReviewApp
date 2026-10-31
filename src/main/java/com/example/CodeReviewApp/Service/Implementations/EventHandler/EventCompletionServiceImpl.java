@@ -40,38 +40,59 @@ public class EventCompletionServiceImpl implements EventCompletionService{
 
     @Override
     @Transactional
-    public void handleSuccess(ReviewCompletedEvent event) {
+   public void handleSuccess(ReviewCompletedEvent event) {
 
-        System.out.println("p_id : "+event.getProjectId() + " sub_id :"+ event.getSubmissionId() + " exec : "+event.getExecutionId());
+    if (event == null) {
+        throw new IllegalArgumentException("ReviewCompletedEvent cannot be null");
+    }
 
-        Submission submission = submissionRepository.getSubmission(event.getSubmissionId());
+    Submission submission =
+            submissionRepository.getSubmission(event.getSubmissionId());
 
-        submissionValidationService.validateSubmissionProjectId(event, submission);
+    if (submission == null) {throw new IllegalStateException("Submission not found: " + event.getSubmissionId());}
 
-        SubmissionExecution executionProcessEntity = submissionExecutionRepository.getSubmissionExecution(event.getExecutionId());
+    submissionValidationService.validateSubmissionProjectId(event, submission);
+
+    SubmissionExecution executionProcessEntity = submissionExecutionRepository.getSubmissionExecution(event.getExecutionId());
+
+    if (executionProcessEntity == null) { throw new IllegalStateException( "Execution not found: " + event.getExecutionId());}
 
         submissionValidationService.validateExecutionProcess(executionProcessEntity, submission);
 
         boolean isValid = submissionValidationService.validateExecutionProcessStatus(executionProcessEntity);
-        
-        if(!isValid) return;
-        
-        issueService.saveIssues(event, submission);
 
-        ProjectQualitySettings projectSettings = projectSettingsRepository.getSettingsByProjectId(submission.getProject_id());
-
-        SonarMetric metrics = event.getMetric();  
-        
-        qualityGateService.saveQualityGateResult(metrics, projectSettings, executionProcessEntity.getId());        
-
-        QualityTestResult qualityResult = qualityResultFactory.toQualityTestResult(metrics, executionProcessEntity.getId());
-
-        sonarQualityResultsRepo.insert(qualityResult);        
-
-        String toUserEmail = userRepository.getUserEmailById(submission.getSubmitter());
-
-        notificationService.sendNotification(toUserEmail ,submission.getSubmitter());
+    if (!isValid) {
+        return;
     }
+
+    SonarMetric metrics = event.getMetric();
+
+    if (metrics == null) {throw new IllegalStateException("Sonar metrics are missing for execution: "+ executionProcessEntity.getId());}
+
+    ProjectQualitySettings projectSettings = projectSettingsRepository.getSettingsByProjectId(submission.getProject_id());
+
+    if (projectSettings == null) {throw new IllegalStateException("Quality settings not found for project: "+ submission.getProject_id());}
+
+    issueService.saveIssues(event, submission);
+
+    qualityGateService.saveQualityGateResult(metrics, projectSettings, executionProcessEntity.getId());
+
+    QualityTestResult qualityResult = qualityResultFactory.toQualityTestResult(metrics, executionProcessEntity.getId());
+
+    if (qualityResult == null) {throw new IllegalStateException("Failed to create quality test result for execution: "+ executionProcessEntity.getId());}
+
+    sonarQualityResultsRepo.insert(qualityResult);
+
+    submissionExecutionRepository.updateStatus(executionProcessEntity.getId(),SubmissionExecutionStatus.COMPLETED);
+
+    String toUserEmail = userRepository.getUserEmailById(submission.getSubmitter());
+
+    if (toUserEmail != null && !toUserEmail.isBlank()) {
+
+        notificationService.sendNotification(toUserEmail, submission.getSubmitter());
+
+        }
+}
 
 
     // to correct this method
