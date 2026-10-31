@@ -12,6 +12,7 @@ import com.example.CodeReviewApp.dto.Authentication.In.LoginDto;
 import com.example.CodeReviewApp.dto.Authentication.In.RegistrationDto;
 import com.example.CodeReviewApp.dto.Authentication.Out.SuccessFulAuthentication;
 import com.example.CodeReviewApp.exceptions.BadCredentials;
+import com.example.CodeReviewApp.exceptions.RessourceAlreadyExists;
 import com.example.CodeReviewApp.exceptions.RessourceNotFoundException;
 import com.example.CodeReviewApp.mapper.UserFactory;
 import com.example.CodeReviewApp.security.JwtService;
@@ -34,7 +35,7 @@ public class AuthenticationService {
         Boolean exists = userRepository.checkExistsByEmail(registrationDto.email());
 
         if (exists) {
-            throw new RessourceNotFoundException("email already exists");
+            throw new RessourceAlreadyExists("email already exists");
         }
 
         User user = userFactory.toUser(registrationDto);
