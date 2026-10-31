@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +34,13 @@ import com.example.CodeReviewApp.Repo.SubmissionLabelsRepository;
 import com.example.CodeReviewApp.Repo.SubmissionRepository;
 import com.example.CodeReviewApp.Service.Implementations.SubmissionDetailsServiceImpl;
 import com.example.CodeReviewApp.dto.Comments.OUt.CommentResponseDto;
+import com.example.CodeReviewApp.dto.File.FileDto;
 import com.example.CodeReviewApp.dto.Submissions.Out.FileContentResponseDto;
+import com.example.CodeReviewApp.dto.Submissions.Out.HumanReviewResponse;
 import com.example.CodeReviewApp.dto.Submissions.Out.ProjectSubmissionsDto;
 import com.example.CodeReviewApp.dto.Submissions.Out.SonarReviewResponse;
 import com.example.CodeReviewApp.dto.Submissions.Out.SubmissionDetailsDto;
+import com.example.CodeReviewApp.dto.User.UserDto;
 import com.example.CodeReviewApp.exceptions.ActionNotAllowedException;
 import com.example.CodeReviewApp.exceptions.RessourceNotFoundException;
 import com.example.CodeReviewApp.util.Auth.AuthenticationContext;
@@ -70,6 +74,7 @@ public class SubmissionDetailsServiceTest {
     public class ProjectSubmissionsTests {
         @Test
         public void shouldReturnProjectSubmissions(){
+            int page=1,size=10;
     
             User user = new User();
     
@@ -85,9 +90,9 @@ public class SubmissionDetailsServiceTest {
     
             when(projectMembersRepository.isUserAlreadyMemberOfProject(projectId, user.getId())).thenReturn(true);
     
-            when(submissionRepository.getProjectSubmissions(projectId)).thenReturn(projectSubmissions);
+            when(submissionRepository.getProjectSubmissions(projectId,page,size)).thenReturn(projectSubmissions);
     
-            List<ProjectSubmissionsDto> result = submissionDetailsServiceImpl.getProjectSubmissions(projectId);
+            List<ProjectSubmissionsDto> result = submissionDetailsServiceImpl.getProjectSubmissions(projectId,page,size);
     
             assertEquals(projectSubmissions, result);
     
@@ -95,7 +100,7 @@ public class SubmissionDetailsServiceTest {
     
             verify(projectMembersRepository).isUserAlreadyMemberOfProject(projectId, user.getId());
     
-            verify(submissionRepository).getProjectSubmissions(projectId);
+            verify(submissionRepository).getProjectSubmissions(projectId,page,size);
     
         }
         
@@ -103,6 +108,7 @@ public class SubmissionDetailsServiceTest {
         public void shouldThrowWhenUserIsNotProjectMember(){
 
         User user = new User();
+        int page=1,size=10;
 
         user.setId(10L);
 
@@ -116,13 +122,13 @@ public class SubmissionDetailsServiceTest {
 
         when(projectMembersRepository.isUserAlreadyMemberOfProject(projectId, user.getId())).thenReturn(false);
 
-        assertThrows(ActionNotAllowedException.class, ()->submissionDetailsServiceImpl.getProjectSubmissions(projectId));
+        assertThrows(ActionNotAllowedException.class, ()->submissionDetailsServiceImpl.getProjectSubmissions(projectId,page,size));
 
         verify(authenticationContext).getCurrentUser();
 
         verify(projectMembersRepository).isUserAlreadyMemberOfProject(projectId, user.getId());
 
-        verify(submissionRepository,never()).getProjectSubmissions(projectId);
+        verify(submissionRepository,never()).getProjectSubmissions(projectId,page,size);
 
         }
         
@@ -130,6 +136,8 @@ public class SubmissionDetailsServiceTest {
         public void shouldReturnEmptyProjectDetails(){
 
         User user = new User();
+
+        int page=1,size=10;
 
         user.setId(10L);
 
@@ -139,9 +147,9 @@ public class SubmissionDetailsServiceTest {
 
         when(projectMembersRepository.isUserAlreadyMemberOfProject(projectId, user.getId())).thenReturn(true);
 
-        when(submissionRepository.getProjectSubmissions(projectId)).thenReturn(List.of());
+        when(submissionRepository.getProjectSubmissions(projectId,page,size)).thenReturn(List.of());
 
-        List<ProjectSubmissionsDto> result = submissionDetailsServiceImpl.getProjectSubmissions(projectId);
+        List<ProjectSubmissionsDto> result = submissionDetailsServiceImpl.getProjectSubmissions(projectId,page,size);
 
         verify(authenticationContext).getCurrentUser();
 
@@ -157,32 +165,53 @@ public class SubmissionDetailsServiceTest {
     @Nested
     class SubmissionDetailsTests{
         
-    //     @Test
-    //     public void shouldReturnSubmissionDetailsForHumanReview(){
+        
+        @Test
+public void shouldReturnSubmissionDetailsForHumanReview() {
 
-    //     Long submissionId = 10L;
+    Long submissionId = 10L;
 
-    //     SubmissionDetailsDto submissionDetailsDto = new SubmissionDetailsDto(1L,any(),any(SonarReviewResponse.class),any(),anyString());
+    SonarReviewResponse sonarReviewResponse = new SonarReviewResponse();
 
-    //     List<String> labels = new ArrayList<>();
+    HumanReviewResponse humanReviewResponse =
+        new HumanReviewResponse(
+            "title",
+            "description",
+            new UserDto(),
+            List.of(new FileDto()),
+            List.of(new UserDto()),
+            "HUMAN",
+            List.of("PERFORMANCE")
+        );
 
-    //     labels.add("PERFORMACE");
+    SubmissionDetailsDto submissionDetailsDto =
+        new SubmissionDetailsDto(
+            1L,
+            LocalDateTime.now(),
+            sonarReviewResponse,
+            humanReviewResponse,
+            "HUMAN"
+        );
 
-    //     when(submissionRepository.getSubmissionDetails(submissionId)).thenReturn(submissionDetailsDto);
+    List<String> labels = List.of("PERFORMANCE");
 
-    //     when(submissionLabelsRepository.getSubmissionLabels(submissionId)).thenReturn(labels);
+    when(submissionRepository.getSubmissionDetails(submissionId))
+        .thenReturn(submissionDetailsDto);
 
-    //     SubmissionDetailsDto result = submissionDetailsServiceImpl.getSubmissionDetails(submissionId);
+    when(submissionLabelsRepository.getSubmissionLabels(submissionId))
+        .thenReturn(labels);
 
-    //     verify(submissionRepository).getSubmissionDetails(submissionId);
+    SubmissionDetailsDto result =
+        submissionDetailsServiceImpl.getSubmissionDetails(submissionId);
 
-    //     verify(submissionLabelsRepository).getSubmissionLabels(submissionId);
+    verify(submissionRepository).getSubmissionDetails(submissionId);
+    verify(submissionLabelsRepository).getSubmissionLabels(submissionId);
 
-    //     assertEquals(submissionDetailsDto, result);
+    assertEquals(submissionDetailsDto, result);
+    assertEquals("HUMAN", result.getReviewType());
+    assertEquals(humanReviewResponse, result.getHumanReviewResponse());
+}
 
-    //     // assertEquals(labels, result.getLabels());
-
-    // }
 
     @Test
     public void shouldThrowWhenSubmissionNotFound(){
@@ -379,7 +408,7 @@ public class SubmissionDetailsServiceTest {
     
             SubmissionStatus target = SubmissionStatus.APPROVED;
     
-            when(submissionRepository.getSubmission(submissionId)).thenReturn(submission);
+            when(submissionRepository.getSubmissionForUpdate(submissionId)).thenReturn(submission);
     
             when(authenticationContext.getCurrentUser()).thenReturn(user);
     
@@ -395,9 +424,7 @@ public class SubmissionDetailsServiceTest {
         public void shouldThrowWhenSubmissionNotFound(){
     
             Long submissionId = 1L;
-    
-            when(submissionRepository.getSubmission(submissionId)).thenReturn(null);
-    
+        
             SubmissionStatus target = SubmissionStatus.APPROVED;
     
             assertThrows(RessourceNotFoundException.class, ()-> submissionDetailsServiceImpl.updateSubmissionStatus(submissionId,target));
@@ -427,7 +454,7 @@ public class SubmissionDetailsServiceTest {
     
             SubmissionStatus target = SubmissionStatus.APPROVED;
     
-            when(submissionRepository.getSubmission(submissionId)).thenReturn(submission);
+            when(submissionRepository.getSubmissionForUpdate(submissionId)).thenReturn(submission);
     
             when(authenticationContext.getCurrentUser()).thenReturn(user);
     
@@ -457,7 +484,7 @@ public class SubmissionDetailsServiceTest {
     
             SubmissionStatus target = SubmissionStatus.APPROVED;
     
-            when(submissionRepository.getSubmission(submissionId)).thenReturn(submission);
+            when(submissionRepository.getSubmissionForUpdate(submissionId)).thenReturn(submission);
     
             when(authenticationContext.getCurrentUser()).thenReturn(user);
                 
@@ -485,9 +512,7 @@ public class SubmissionDetailsServiceTest {
             user.setId(3L);
     
             SubmissionStatus target = SubmissionStatus.PENDING;
-    
-            when(submissionRepository.getSubmission(submissionId)).thenReturn(submission);
-            
+                
             assertThrows(RuntimeException.class, ()-> submissionDetailsServiceImpl.updateSubmissionStatus(submissionId, target));
     
             verifyNoInteractions(authenticationContext);
