@@ -36,7 +36,7 @@ server:
 
 
 frontEnd:
-  url: http://localhost:5173
+  url: ${FRONT_URL:http://localhost:5173}
 
 logging:
   level:
