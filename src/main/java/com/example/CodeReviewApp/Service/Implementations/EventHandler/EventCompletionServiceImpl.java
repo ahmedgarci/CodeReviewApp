@@ -71,7 +71,7 @@ public class EventCompletionServiceImpl implements EventCompletionService{
 
     ProjectQualitySettings projectSettings = projectSettingsRepository.getSettingsByProjectId(submission.getProject_id());
 
-    if (projectSettings == null) {throw new IllegalStateException("Quality settings not found for project: "+ submission.getProject_id());}
+//    if (projectSettings == null) {throw new IllegalStateException("Quality settings not found for project: "+ submission.getProject_id());}
 
     issueService.saveIssues(event, submission);
 
