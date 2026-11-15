@@ -17,7 +17,7 @@ public class EventProducerImpl implements EventProducer{
     @Override
     public void execute(Event event) {
 
-        rabbitTemplate.convertAndSend(RabbitMqBeansConfig.REVIEW_REQUESTED_QUEUE,RabbitMqBeansConfig.REVIEW_REQUESTED_ROUTING_KEY,event);
+        rabbitTemplate.convertAndSend(RabbitMqBeansConfig.REVIEW_EXCHANGE, RabbitMqBeansConfig.REVIEW_REQUESTED_ROUTING_KEY, event);
 
     }
     
