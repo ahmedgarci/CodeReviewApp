@@ -17,7 +17,7 @@ public class QualityGateService {
 
     public void saveQualityGateResult(SonarMetric metrics, ProjectQualitySettings projectSettings,Long executionId) {
 
-        if(projectSettings.isEnabled() && projectSettings.getMax_bugs() < metrics.bugs() || projectSettings.getMax_code_smells() < metrics.codeSmells()
+        if(projectSettings.getMax_bugs() < metrics.bugs() || projectSettings.getMax_code_smells() < metrics.codeSmells()
          || projectSettings.getMax_vulnerabilities() < metrics.vulnerabilities() || projectSettings.getMin_coverage() < metrics.coverage()){
             
             submissionExecutionRepository.updateFailure(executionId, SubmissionExecutionStatus.FAILED, "tests failed because of the project settings are enabled");
