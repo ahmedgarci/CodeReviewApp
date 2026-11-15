@@ -12,16 +12,18 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
+
 
 
 
 @Configuration
 public class RabbitMqBeansConfig {
 
-    public static final String REVIEW_EXCHANGE = "reviewExchange";
-    public static final String REVIEW_QUEUE = "reviewQueue";
-    public static final String REVIEW_ROUTING_KEY = "review.review";
-    public static final String REVIEW_COMPLETED_QUEUE = "reviewCompletedQueue";
+    public static final String REVIEW_EXCHANGE = "code-review.exchange";
+    public static final String REVIEW_REQUESTED_QUEUE = "code-review.requested.queue";
+    public static final String REVIEW_REQUESTED_ROUTING_KEY = "review.requested";
+    public static final String REVIEW_COMPLETED_QUEUE = "code-review.completed.queue";
     public static final String REVIEW_COMPLETED_ROUTING_KEY = "review.completed";
     
   
@@ -29,13 +31,13 @@ public class RabbitMqBeansConfig {
     @Bean
     public MessageConverter converter(){
 
-    return new Jackson2JsonMessageConverter();
+        return new Jackson2JsonMessageConverter();
     
-}
+    }
 
 
 @Bean
-public RabbitTemplate rabbitTemplate(ConnectionFactory factory){
+public RabbitTemplate rabbitTemplate(@NonNull  ConnectionFactory factory){
 
     RabbitTemplate template =new RabbitTemplate(factory);
 
@@ -45,10 +47,10 @@ public RabbitTemplate rabbitTemplate(ConnectionFactory factory){
 
 }
 
-    @Bean("reviewQueue")
+    @Bean("reviewRequestsQueue")
     public Queue queue(){
     
-        return new Queue(REVIEW_QUEUE, true);
+        return new Queue(REVIEW_REQUESTED_QUEUE, true);
     
     }
     
@@ -60,13 +62,13 @@ public RabbitTemplate rabbitTemplate(ConnectionFactory factory){
     }   
 
     @Bean
-    public Binding binding(@Qualifier("reviewQueue") Queue queue,Exchange exchange){
+    public Binding binding(@Qualifier("reviewRequestsQueue") Queue queue,Exchange exchange){
 
-        return BindingBuilder.bind(queue).to(exchange).with(REVIEW_ROUTING_KEY).noargs();
+        return BindingBuilder.bind(queue).to(exchange).with(REVIEW_REQUESTED_ROUTING_KEY).noargs();
 
     }
 
-    @Bean("reviewCompletedQueue")
+    @Bean("reviewsCompletedQueue")
     public Queue reviewCompletedQueue(){
     
         return new Queue(REVIEW_COMPLETED_QUEUE, true);
@@ -74,7 +76,7 @@ public RabbitTemplate rabbitTemplate(ConnectionFactory factory){
     }
 
     @Bean
-    public Binding reviewCompletedBinding(@Qualifier("reviewCompletedQueue") Queue queue,Exchange exchange){
+    public Binding reviewCompletedBinding(@Qualifier("reviewsCompletedQueue") Queue queue,Exchange exchange){
 
         return BindingBuilder.bind(queue).to(exchange).with(REVIEW_COMPLETED_ROUTING_KEY).noargs();
 
